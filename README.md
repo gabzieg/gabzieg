@@ -24,9 +24,9 @@
 
 ### 🔭 What I've built & currently working on
 
-- [gabzieg/brave-speed-dial](https://github.com/gabzieg/brave-speed-dial) - Customizable New Tab Speed Dial extension for Brave and Chromium browsers with drag-and-drop folders, custom wallpapers, and sync.
-- [gabzieg/HabitTrackerHTML](https://github.com/gabzieg/HabitTrackerHTML) - Minimalist, high-contrast 365-day habit tracker web app with GitHub-style heatmaps and 100% offline localStorage privacy.
-- [gabzieg/SocialMediaBlocker](https://github.com/gabzieg/SocialMediaBlocker) - Minimalist Chromium extension to maintain deep focus by blocking distracting social media platforms and tracking daily blocked attempts.
+- [gabzieg/BraveSpeedDial](https://github.com/gabzieg/BraveSpeedDial) - Customizable New Tab Speed Dial extension for Brave and Chromium browsers with drag-and-drop folders, custom wallpapers, and sync.
+- [gabzieg/GeminiTree](https://github.com/gabzieg/GeminiTree) - Chromium extension that brings native drag-and-drop folder and subfolder organization to Google Gemini chats with local storage persistence.
+- [gabzieg/DetoxMedia](https://github.com/gabzieg/DetoxMedia) - Minimalist Chromium extension to maintain deep focus by blocking distracting social media platforms and tracking daily blocked attempts.
+- [gabzieg/YearGrid](https://github.com/gabzieg/YearGrid) - Minimalist, high-contrast 365-day habit tracker web app with GitHub-style heatmaps and 100% offline localStorage privacy.
 - [gabzieg/YouTubeFocus](https://github.com/gabzieg/YouTubeFocus) - Chromium extension that removes YouTube distractions by blocking Shorts, hiding home feed recommendations, and routing directly to Subscriptions.
-- [gabzieg/GeminiFolder](https://github.com/gabzieg/GeminiFolder) - Chromium extension that brings native drag-and-drop folder and subfolder organization to Google Gemini chats with local storage persistence.
 - [gabzieg/SpotifyCacheCleaner](https://github.com/gabzieg/SpotifyCacheCleaner) - Automated background Spotify cache manager for Windows with a visual telemetry dashboard and scheduled task integration.
