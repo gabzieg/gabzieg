@@ -1,7 +1,7 @@
 """Render profile sections with GitHub queries and bounded retries.
 
-Inspired by ChrisTitusTech/ChrisTitusTech: replaces comment markers in README.gtpl
-literally so repository descriptions are never executed as template code.
+Replaces comment markers in README.gtpl literally and deduplicates against
+highlighted repositories so no project appears twice on the profile.
 """
 
 import json
@@ -13,18 +13,18 @@ import sys
 import time
 
 
-QUERY = """
-query($login: String!) {
-  user(login: $login) {
-    contributionsCollection {
-      commitContributionsByRepository(maxRepositories: 100) {
-        repository { nameWithOwner url description isPrivate }
-        contributions(last: 1) { nodes { occurredAt } }
-      }
-    }
-  }
+HIGHLIGHTED_REPOS = {
+    "atmosfera",
+    "subtrack",
+    "bropilot",
+    "ai-usage-menu",
+    "readafter",
 }
-"""
+
+IGNORED_REPOS = {
+    "gabzieg",
+    "introduction",
+}
 
 
 def api(arguments):
@@ -40,7 +40,7 @@ def api(arguments):
             )
             data = json.loads(result.stdout)
             if isinstance(data, dict) and data.get("errors"):
-                raise ValueError(f"GitHub returned GraphQL errors: {data['errors']}")
+                raise ValueError(f"GitHub returned errors: {data['errors']}")
             return data
         except (subprocess.SubprocessError, ValueError, KeyError, TypeError) as exc:
             if attempt == 2:
@@ -58,29 +58,6 @@ def repo_line(name, url, description):
     return f"- [{name}]({url}) - {clean(description)}"
 
 
-def recent_contributions(entries, login):
-    filtered = [
-        entry
-        for entry in entries
-        if not entry["repository"]["isPrivate"]
-        and entry["repository"]["nameWithOwner"].lower() != f"{login}/{login}".lower()
-        and entry["repository"]["nameWithOwner"].lower() != f"{login}/introduction".lower()
-        and entry["contributions"]["nodes"]
-    ]
-    filtered.sort(
-        key=lambda entry: entry["contributions"]["nodes"][0]["occurredAt"],
-        reverse=True,
-    )
-    return [
-        repo_line(
-            entry["repository"]["nameWithOwner"],
-            entry["repository"]["url"],
-            entry["repository"]["description"],
-        )
-        for entry in filtered[:5]
-    ]
-
-
 def render(template, sections_map):
     for name in sections_map:
         marker = "{{ /* " + name + " */ }}"
@@ -94,39 +71,28 @@ def render(template, sections_map):
 
 
 def sections(login):
-    data = api(["graphql", "-f", f"query={QUERY}", "-f", f"login={login}"])
-    entries = data["data"]["user"]["contributionsCollection"]["commitContributionsByRepository"]
-    result = {"RECENT_CONTRIBUTIONS": recent_contributions(entries, login)}
-
     repos = []
     page = 1
-    while len(repos) < 5:
+    while len(repos) < 12:
         batch = api([f"users/{login}/repos?sort=pushed&direction=desc&per_page=100&page={page}"])
         repos.extend(
             repo
             for repo in batch
             if not repo["fork"]
             and not repo["private"]
-            and repo["full_name"].lower() != f"{login}/{login}".lower()
-            and repo["full_name"].lower() != f"{login}/introduction".lower()
+            and repo["name"].lower() not in IGNORED_REPOS
+            and repo["name"].lower() not in HIGHLIGHTED_REPOS
         )
         if len(batch) < 100:
             break
         page += 1
 
-    result["RECENT_REPOS"] = [
-        repo_line(repo["full_name"], repo["html_url"], repo["description"])
-        for repo in repos[:5]
-    ]
-
-    stars = api([f"users/{login}/starred?sort=created&direction=desc&per_page=5"])
-    star_lines = [
-        repo_line(repo["full_name"], repo["html_url"], repo["description"])
-        for repo in stars
-        if not repo.get("private")
-    ]
-    result["RECENT_STARS"] = star_lines if star_lines else ["- Exploring open-source projects across AI, Kotlin, and Developer Tooling."]
-    return result
+    return {
+        "RECENT_REPOS": [
+            repo_line(repo["full_name"], repo["html_url"], repo["description"])
+            for repo in repos[:8]
+        ]
+    }
 
 
 if __name__ == "__main__":
