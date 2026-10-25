@@ -31,6 +31,7 @@
 
 ### 🔭 What I've built & currently working on
 
+- [gabzieg/KybGuard](https://github.com/gabzieg/KybGuard) - Plataforma B2B de Homologação de Fornecedores (KYB), Due Diligence Societária integrada à Receita Federal (CNPJ/QSA) e Trilha de Auditoria Imutável
 - [gabzieg/BraveSpeedDial](https://github.com/gabzieg/BraveSpeedDial) - Customizable New Tab Speed Dial extension for Brave and Chromium browsers with drag-and-drop folders, custom wallpapers, and sync.
 - [gabzieg/GeminiTree](https://github.com/gabzieg/GeminiTree) - Chromium extension that brings native drag-and-drop folder and subfolder organization to Google Gemini chats with local storage persistence.
 - [gabzieg/DetoxMedia](https://github.com/gabzieg/DetoxMedia) - Minimalist Chromium extension to maintain deep focus by blocking distracting social media platforms and tracking daily blocked attempts.
